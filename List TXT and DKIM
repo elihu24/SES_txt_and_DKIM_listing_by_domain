@@ -1,0 +1,51 @@
+#Note: I have the region in this code set to eu-west-1 and a custom profile that needs to be cleaned up before posting publicly
+
+import csv
+import os
+import json
+
+#Use this script to grab the txt verification and dkim keys for each domain listed in the csv file.
+##add the aws ses list-identites to an inteneral list rather than run off a csv
+
+with open('cds -ses to migrate.csv') as file:
+    reader = csv.reader(file)
+
+    for row in reader:
+    #Run verify-domain-idenity by domain and produce copyable txt verification output
+        content = "aws ses verify-domain-identity --domain {0} --region eu-west-1 --profile newcds".format(
+            str(row)[2:-6])
+        DOMAIN = ("{0}".format(str(row)[2:-6]))
+        print(DOMAIN.upper())
+        print("TXT Verification:")
+        print("Txt Name: \n_amazonses." + DOMAIN)
+        print("TXT Value:")
+        txtOutput = os.popen(content).read()
+        print(txtOutput[28:72])
+        print("\n")
+
+    #Run get-identity-dkim-attributes by domain and produce copyable dkim key text output
+        dkimVerify = "aws ses get-identity-dkim-attributes --identities {0} --region eu-west-1 --profile newcds".format(
+            str(row)[2:-6])
+        dkimOutput = os.popen(dkimVerify).read()
+        DKIM_dict = json.loads(dkimOutput)
+        DKIM1 = (DKIM_dict["DkimAttributes"][DOMAIN]["DkimTokens"][0])
+        DKIM2 = (DKIM_dict["DkimAttributes"][DOMAIN]["DkimTokens"][1])
+        DKIM3 = (DKIM_dict["DkimAttributes"][DOMAIN]["DkimTokens"][2])
+        print("DKIM Verification:")
+        print("Name: \n" + DKIM1 + "._domainkey." + DOMAIN)
+        print("Type: CNAME")
+        print("Value: \n" + DKIM1 + ".dkim.amazonses.com")
+        print("\n")
+        print("Name: \n" + DKIM2 + "._domainkey." + DOMAIN)
+        print("Type: CNAME")
+        print("Value: \n" + DKIM2 + ".dkim.amazonses.com")
+        print("\n")
+        print("Name: \n" + DKIM3 + "._domainkey." + DOMAIN)
+        print("Type: CNAME")
+        print("Value: \n" + DKIM3 + ".dkim.amazonses.com")
+        print("\n")
+
+
+    file.close()
+
+# run with python [ScriptName].py > output.txt
