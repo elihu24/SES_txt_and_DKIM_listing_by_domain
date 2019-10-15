@@ -1,0 +1,20 @@
+import csv
+import os
+
+#Use this script to set DKIM keys on all domains in the csv list
+##add the aws ses list-identites to an inteneral list rather than run off a csv
+
+with open('cds -ses to migrate.csv') as file:
+    reader = csv.reader(file)
+
+    for row in reader:
+        content = "aws ses verify-domain-dkim --domain {0} --region eu-west-1 --profile newcds".format(
+            str(row)[2:-6])
+        DOMAIN = ("{0}".format(str(row)[2:-6]))
+        print(DOMAIN.upper())
+        txtOutput = os.popen(content).read()
+        print(txtOutput)
+
+
+    file.close()
+
