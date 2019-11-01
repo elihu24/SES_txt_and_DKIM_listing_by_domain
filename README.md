@@ -2,8 +2,6 @@
 Python script to pull and list in a reader friendly way txt verification values and dkim keys by domain in AWS SES
 
 ========
-Scratch pad:
-==========
 Use case: List all SES domains with their txt verification and their dkim records
 
 Create all DKIM IDs
