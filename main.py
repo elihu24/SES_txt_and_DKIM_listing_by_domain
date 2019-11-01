@@ -1,3 +1,4 @@
+#Pull All AWS SES Identities in given region and list txt and dkim keys
 #Use this script to grab the txt verification and dkim keys for each SES domain found in a given region.
 
 import os
