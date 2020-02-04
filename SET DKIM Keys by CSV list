@@ -2,8 +2,8 @@ import csv
 import os
 
 #AWS Variables: enter yours here (should match your aws cli profile set up)
-AWSregion = "YOURREGION"
-AWSprofile = "YOURPROFILE"
+AWSregion = "YOUR_REGION"
+AWSprofile = "YOUR_PROFILE"
 
 #Use this script to set DKIM keys on all domains in the csv list
 ##add the aws ses list-identites to an inteneral list rather than run off a csv
@@ -20,4 +20,3 @@ with open('cds -ses to migrate.csv') as file:
         print(txtOutput)
 
     file.close()
-
