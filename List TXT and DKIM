@@ -4,16 +4,22 @@ import csv
 import os
 import json
 
+
+#AWS Variables: enter yours here (should match your aws cli profile set up)
+AWSregion = "YOURREGION"
+AWSprofile = "YOURPROFILE"
+List = "YOUR_CSV_FILE/PATH"
+
 #Use this script to grab the txt verification and dkim keys for each domain listed in the csv file.
 ##add the aws ses list-identites to an inteneral list rather than run off a csv
 
-with open('cds -ses to migrate.csv') as file:
+with open(List) as file:
     reader = csv.reader(file)
 
     for row in reader:
     #Run verify-domain-idenity by domain and produce copyable txt verification output
-        content = "aws ses verify-domain-identity --domain {0} --region eu-west-1 --profile newcds".format(
-            str(row)[2:-6])
+        content = "aws ses verify-domain-identity --domain {0} --region {1} --profile {2}".format(
+            str(row)[2:-6], str(AWSprofile), str(AWSregion))
         DOMAIN = ("{0}".format(str(row)[2:-6]))
         print(DOMAIN.upper())
         print("TXT Verification:")
@@ -24,8 +30,8 @@ with open('cds -ses to migrate.csv') as file:
         print("\n")
 
     #Run get-identity-dkim-attributes by domain and produce copyable dkim key text output
-        dkimVerify = "aws ses get-identity-dkim-attributes --identities {0} --region eu-west-1 --profile newcds".format(
-            str(row)[2:-6])
+        dkimVerify = "aws ses get-identity-dkim-attributes --identities {0} --region {1} --profile {2}".format(
+            str(row)[2:-6], str(AWSprofile), str(AWSregion))
         dkimOutput = os.popen(dkimVerify).read()
         DKIM_dict = json.loads(dkimOutput)
         DKIM1 = (DKIM_dict["DkimAttributes"][DOMAIN]["DkimTokens"][0])
