@@ -1,5 +1,3 @@
-#Note: I have the region in this code set to eu-west-1 and a custom profile that needs to be cleaned up before posting publicly
-
 import csv
 import os
 import json
