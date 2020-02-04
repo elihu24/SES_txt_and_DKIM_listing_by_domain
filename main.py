@@ -5,8 +5,8 @@ import os
 import json
 
 #AWS Variables: enter yours here (should match your aws cli profile set up)
-AWSregion = "eu-west-1"
-AWSprofile = "newcds"
+AWSregion = "YOUR_REGION"
+AWSprofile = "YOUR_PROFILE"
 
 #Grab all SES domains in specified region and return the results as the variable "identities"
 listSESIdentites = "aws ses list-identities --profile {0} --region {1}".format(str(AWSprofile), str(AWSregion))
@@ -38,7 +38,7 @@ for domain_number in range(len(Domain_list)):
     print("\n")
 
     #Run get-identity-dkim-attributes by domain and produce copyable dkim key text output
-    dkimVerify = "aws ses get-identity-dkim-attributes --identities {0} --region eu-west-1 --profile newcds".format(str(DOMAIN))
+    dkimVerify = "aws ses get-identity-dkim-attributes --identities {0} --region {1} --profile {2}".format(str(DOMAIN), str(AWSregion), str(AWSprofile))
     #Run command and read back output to variable "dkimOutput"
     dkimOutput = os.popen(dkimVerify).read()
     #parse as JSON
