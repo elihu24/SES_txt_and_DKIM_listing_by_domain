@@ -1,0 +1,29 @@
+#Use this script to generate DKIM keys for every domain in your AWS SES region
+
+import os
+import json
+
+#AWS Variables: enter yours here (should match your aws cli profile set up)
+AWSregion = "YOUR_REGION"
+AWSprofile = "YOUR_PROFILE"
+
+#Grab all SES domains in specified region and return the results as the variable "identities"
+listSESIdentites = "aws ses list-identities --profile {0} --region {1}".format(str(AWSprofile), str(AWSregion))
+identities = os.popen(listSESIdentites).read()
+#Convert "identities" to a JSON dictionary SESIDs_dict
+SESIDs_dict = json.loads(identities)
+#Import the Identities domain name list to a python array named "Domain_list"
+Domain_list = (SESIDs_dict['Identities'])
+#Rearrange the list in alphabetical order
+Domain_list.sort()
+
+#Loop through the array:
+for domain_number in range(len(Domain_list)):
+    #Set the Domain for later use
+    DOMAIN = (Domain_list[domain_number])
+    print(DOMAIN.upper())
+    #Build the ses dkim verification command
+    content = "aws ses verify-domain-dkim --domain {0} --profile {1} --region {2}".format(str(DOMAIN), str(AWSprofile), str(AWSregion))
+    #Run the above command and return the output as a Variable
+    txtOutput = os.popen(content).read()
+    print(txtOutput)
