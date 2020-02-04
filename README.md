@@ -3,6 +3,7 @@ Python scripts for working with AWS SES
 These assume aws cli has been intalled on your machine and that aws configure has been run on them.
 
 If no custom profiles have been created, use: default for the profile variable.
+
 ========
 Use case: List all SES domains with their txt verification and their dkim records
 
